@@ -1,9 +1,11 @@
+package main;
+
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {  // Run Swing code on the Event Dispatch Thread
-            JFrame window = new JFrame("Elfbound Zero"); // Create a window
+            JFrame window = new JFrame("Bad game"); // makes the window
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.setResizable(false);
 
@@ -12,6 +14,7 @@ public class Main {
             window.pack(); // Resize window to fit panel
             window.setLocationRelativeTo(null); // Center the window
             window.setVisible(true); // Show it
+            gamePanel.startGame();
 
         });
     }
