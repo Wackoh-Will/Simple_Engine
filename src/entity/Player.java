@@ -14,7 +14,6 @@ public class Player {
     public double ymove;
     public double xmove;
     public boolean ship = true;
-    private boolean ePressedLastFrame = false;
 
     public Player(int x, int y) {
         this.x = x;

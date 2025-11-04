@@ -3,6 +3,7 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 import entity.Player; // import the Player class
+import entity.Enemy;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
@@ -14,7 +15,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
 
-    private Player player; // our player object
+    private Player player;// our player object
+    private Enemy enemy;
 
     public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed;
 
@@ -24,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         this.setBackground(Color.BLACK);
 
         player = new Player(100, 200); // position on screen (x=100, y=200)
+        enemy = new Enemy(200,200);
 
         this.setFocusable(true);
         this.addKeyListener(this);
@@ -51,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public void update() {
         player.update(this);
         ePressed = false;
+        enemy.update(this);
 
     }
 
@@ -61,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         // Draw the player
         player.draw(g);
+        enemy.draw(g);
     }
 
     @Override
