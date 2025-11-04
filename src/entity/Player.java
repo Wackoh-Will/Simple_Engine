@@ -9,7 +9,9 @@ import main.GamePanel;
 public class Player {
     private int x, y;
     private BufferedImage sprite;
-    private int speed = 4;
+    private double speed = 0.2;
+    public double ymove;
+    public double xmove;
 
     public Player(int x, int y) {
         this.x = x;
@@ -34,9 +36,20 @@ public class Player {
 
     //handles changes like movement and other motions of the player
     public void update(GamePanel gp) {
-        if (gp.upPressed) y -= speed;
-        if (gp.downPressed) y += speed;
-        if (gp.leftPressed) x -= speed;
-        if (gp.rightPressed) x += speed;
+        if (gp.upPressed) ymove -= speed;
+        if (gp.downPressed) ymove += speed;
+        if (gp.leftPressed) xmove -= speed;
+        if (gp.rightPressed) xmove += speed;
+
+        double length = Math.sqrt(xmove * xmove + ymove * ymove);
+        double maxSpeed = 4;
+        if (length > maxSpeed) {
+            xmove = (xmove / length) * maxSpeed;
+            ymove = (ymove / length) * maxSpeed;
+        }
+
+        x += xmove;
+        y += ymove;
+
     }
 }
