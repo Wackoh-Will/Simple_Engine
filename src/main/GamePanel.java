@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     private Player player; // our player object
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed;
 
 
     public GamePanel() {
@@ -50,10 +50,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     public void update() {
         player.update(this);
+        ePressed = false;
+
     }
 
 
-    // used to detect key input
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -68,20 +69,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         if (code == KeyEvent.VK_W) {
             upPressed = true;
-            System.out.println("W pressed");
         }
         if (code == KeyEvent.VK_S) {
             downPressed = true;
-            System.out.println("S pressed");
         }
         if (code == KeyEvent.VK_A) {
             leftPressed = true;
-            System.out.println("A pressed");
         }
         if (code == KeyEvent.VK_D) {
             rightPressed = true;
-            System.out.println("D pressed");
         }
+        if (code == KeyEvent.VK_E) ePressed = false;
     }
 
     @Override
@@ -90,24 +88,21 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         if (code == KeyEvent.VK_W) {
             upPressed = false;
-            System.out.println("W released");
         }
         if (code == KeyEvent.VK_S) {
             downPressed = false;
-            System.out.println("S released");
         }
         if (code == KeyEvent.VK_A) {
             leftPressed = false;
-            System.out.println("A released");
         }
         if (code == KeyEvent.VK_D) {
             rightPressed = false;
-            System.out.println("D released");
         }
+        if (code == KeyEvent.VK_E) ePressed = true;
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // unused, but must be here
+        // unused
     }
 }

@@ -8,7 +8,6 @@ public class Main {
             JFrame window = new JFrame("Bad game"); // makes the window
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.setResizable(false);
-
             GamePanel gamePanel = new GamePanel(); // Create our custom panel
             window.add(gamePanel); // Add it to the window
             window.pack(); // Resize window to fit panel
