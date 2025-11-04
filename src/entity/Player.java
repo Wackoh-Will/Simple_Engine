@@ -40,7 +40,10 @@ public class Player {
     public void update(GamePanel gp) {
         if (gp.ePressed) {
             ship = !ship;
+            xmove = 0;
+            ymove = 0;
             System.out.println(ship ? "Ship Mode Activated" : "Walking Mode Activated");
+
         }
         if (ship) {
             // ship mode
