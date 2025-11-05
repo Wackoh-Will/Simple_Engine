@@ -7,6 +7,11 @@ import entity.Enemy;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
+//for enemy spawning
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 
 public class GamePanel extends JPanel implements Runnable, KeyListener {
     private boolean running = false;
@@ -16,7 +21,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private final int HEIGHT = 600;
 
     private Player player;// our player object
-    private Enemy enemy;
+
+    //for enemy spawning
+    private EnemySpawner enemySpawner;
+    private List<Enemy> enemies = new ArrayList<>();
 
     public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed;
 
@@ -25,8 +33,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
 
+        //for player spawning
         player = new Player(100, 200); // position on screen (x=100, y=200)
-        enemy = new Enemy(200,200);
+
+        //for enemy spawning
+        enemySpawner = new EnemySpawner(this);
 
         this.setFocusable(true);
         this.addKeyListener(this);
@@ -54,8 +65,19 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public void update() {
         player.update(this);
         ePressed = false;
-        enemy.update(this);
+        for (Enemy e : enemies) {
+            e.update(this);
+        }
 
+    }
+
+    //enemy spawning
+    public void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
     }
 
 
@@ -65,7 +87,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         // Draw the player
         player.draw(g);
-        enemy.draw(g);
     }
 
     @Override
