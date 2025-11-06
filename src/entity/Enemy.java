@@ -16,6 +16,9 @@ public class Enemy {
         this.y = y;
         loadSprite();
     }
+    public Rectangle getHitbox() {
+        return new Rectangle(x, y, sprite.getWidth(), sprite.getHeight());
+    }
 
     private void loadSprite() {
         try {

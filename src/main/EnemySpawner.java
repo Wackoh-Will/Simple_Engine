@@ -8,10 +8,11 @@ public class EnemySpawner {
 
     public EnemySpawner(GamePanel gp){
         this.gp = gp;
+        this.random = new Random();
     }
     public void spawnRandomEnemy() {
-        int x = (int)(Math.random() * gp.getWidth() - 32);
-        int y = (int)(Math.random() * gp.getHeight() - 32);
+        int x = (int)(Math.random() * (gp.getWidth() - 32));
+        int y = (int)(Math.random() * (gp.getHeight() - 32));
         gp.addEnemy(new Enemy(x, y));
     }
 }

@@ -25,6 +25,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     //for enemy spawning
     private EnemySpawner enemySpawner;
     private List<Enemy> enemies = new ArrayList<>();
+    private long lastSpawnTime = 0;
+    private final long spawnInterval = 3000;
 
     public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed;
 
@@ -65,9 +67,31 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public void update() {
         player.update(this);
         ePressed = false;
+
+        //Hit detection
+        Rectangle playerHitbox = player.getHitbox();
+
+        for (Enemy enemy : enemies) {
+            if (playerHitbox.intersects(enemy.getHitbox())) {
+                System.out.println("COLLISION!");
+                // damage or something idk yet
+            }
+        }
+
+        //Enemy spawning
+        long currentTime = System.currentTimeMillis();
+
+        // Checks if it's time to spawn a new enemy
+        if (currentTime - lastSpawnTime > spawnInterval) {
+            enemySpawner.spawnRandomEnemy();
+            lastSpawnTime = currentTime;
+        }
+
+        // Update existing enemies
         for (Enemy e : enemies) {
             e.update(this);
         }
+
 
     }
 
@@ -87,6 +111,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         // Draw the player
         player.draw(g);
+
+        for (Enemy enemy : enemies) {
+            enemy.draw(g);
+        }
     }
 
     @Override
