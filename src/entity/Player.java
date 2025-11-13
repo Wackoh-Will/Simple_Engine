@@ -26,7 +26,7 @@ public class Player {
 
     private void loadSprite() {
         try {
-            sprite = ImageIO.read(getClass().getResourceAsStream("/assets/player.png")); //loads the sprite for the player
+            sprite = ImageIO.read(getClass().getResourceAsStream("/assets/Player.png")); //loads the sprite for the player
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to load player sprite");
