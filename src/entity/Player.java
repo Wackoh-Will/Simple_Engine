@@ -14,6 +14,7 @@ public class Player {
     public double ymove;
     public double xmove;
     public boolean ship = true;
+    public int health = 100;
 
     public Player(int x, int y) {
         this.x = x;

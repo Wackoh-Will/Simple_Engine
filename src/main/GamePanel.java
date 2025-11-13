@@ -74,8 +74,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         for (Enemy enemy : enemies) {
             if (playerHitbox.intersects(enemy.getHitbox())) {
                 System.out.println("COLLISION!");
-                // damage or something idk yet
+                player.health -= 10;
             }
+        }
+
+        if(player.health <= 0) {
+            System.out.println("GAME OVER!");
         }
 
         //Enemy spawning
