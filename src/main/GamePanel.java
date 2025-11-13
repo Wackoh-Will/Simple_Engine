@@ -119,6 +119,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         for (Enemy enemy : enemies) {
             enemy.draw(g);
         }
+        
+        //Health Bar
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        String healthText = player.health + " / 100";
+        int x = 10;
+        int y = getHeight() - 10;
+        g.drawString(healthText, x, y);
+
     }
 
     @Override
