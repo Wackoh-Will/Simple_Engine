@@ -74,8 +74,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         for (Enemy enemy : enemies) {
             if (playerHitbox.intersects(enemy.getHitbox())) {
                 System.out.println("COLLISION!");
-                // damage or something idk yet
+                player.health -= 10;
             }
+        }
+
+        if(player.health <= 0) {
+            System.out.println("GAME OVER!");
         }
 
         //Enemy spawning
@@ -115,6 +119,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         for (Enemy enemy : enemies) {
             enemy.draw(g);
         }
+
+        //Health Bar
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        String healthText = player.health + " / 100";
+        int x = 10;
+        int y = getHeight() - 10;
+        g.drawString(healthText, x, y);
+
     }
 
     @Override
