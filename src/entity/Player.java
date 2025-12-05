@@ -85,6 +85,8 @@ public class Player {
             x += xmove;
             y += ymove;
 
+
         }
     }
+    
 }

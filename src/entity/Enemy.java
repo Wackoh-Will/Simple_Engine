@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import entity.Player;
+
 public class Enemy {
     private int x, y;
     private BufferedImage sprite;
@@ -34,7 +36,14 @@ public class Enemy {
             g.drawImage(sprite, x, y, null);
         }
     }
-    public void update(GamePanel gp) {
+    private void checkPlayerCollision(Player p) {
+        if (this.getHitbox().intersects(p.getHitbox())) {
+            System.out.println("COLLISION!");
+            p.health -= 10;
+        }
+    }
 
+    public void update(GamePanel gp) {
+        checkPlayerCollision(gp.getPlayer());
     }
 }

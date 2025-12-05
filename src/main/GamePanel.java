@@ -2,6 +2,9 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
+
+import Weapons.Ak_47; //import the AK
+import Weapons.Gun;
 import entity.Player; // import the Player class
 import entity.Enemy;
 import java.awt.event.KeyListener;
@@ -11,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 
 public class GamePanel extends JPanel implements Runnable, KeyListener {
     private boolean running = false;
@@ -28,7 +30,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private long lastSpawnTime = 0;
     private final long spawnInterval = 3000;
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed;
+    public Gun currentGun = new Ak_47();
+
+    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed, rPressed, m1Pressed;
 
 
     public GamePanel() {
@@ -43,6 +47,23 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         this.setFocusable(true);
         this.addKeyListener(this);
+
+        // For getting mouse input
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                if (e.getButton() == java.awt.event.MouseEvent.BUTTON1) {
+                    m1Pressed = true;
+                }
+            }
+
+            @Override
+            public void mouseReleased(java.awt.event.MouseEvent e) {
+                if (e.getButton() == java.awt.event.MouseEvent.BUTTON1) {
+                    m1Pressed = false;
+                }
+            }
+        });
     }
 
     public void startGame() {
@@ -71,12 +92,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         //Hit detection
         Rectangle playerHitbox = player.getHitbox();
 
-        for (Enemy enemy : enemies) {
-            if (playerHitbox.intersects(enemy.getHitbox())) {
-                System.out.println("COLLISION!");
-                player.health -= 10;
-            }
-        }
 
         if(player.health <= 0) {
             System.out.println("GAME OVER!");
@@ -85,16 +100,22 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         //Enemy spawning
         long currentTime = System.currentTimeMillis();
 
-        // Checks if it's time to spawn a new enemy
-        if (currentTime - lastSpawnTime > spawnInterval) {
-            enemySpawner.spawnRandomEnemy();
-            lastSpawnTime = currentTime;
-        }
 
         // Update existing enemies
         for (Enemy e : enemies) {
             e.update(this);
         }
+
+        enemySpawner.update(this);
+        //for the guns
+
+
+        currentGun.shoot(this);
+
+        currentGun.reload(this);
+
+        currentGun.r_count(this);
+
 
 
     }
@@ -143,7 +164,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         if (code == KeyEvent.VK_D) rightPressed = true;
 
         if (code == KeyEvent.VK_E) ePressed = false;
-    }
+
+        if (code == KeyEvent.VK_R) rPressed = true;
+
+     }
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -158,10 +182,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         if (code == KeyEvent.VK_D) rightPressed = false;
 
         if (code == KeyEvent.VK_E) ePressed = true;
+
+        if (code == KeyEvent.VK_R) rPressed = false;
+
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         // unused
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
