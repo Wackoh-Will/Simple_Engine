@@ -15,7 +15,6 @@ public class EnemySpawner {
     private final long spawnInterval = 3000;
 
 
-    long currentTime = System.currentTimeMillis();
 
     public EnemySpawner(GamePanel gp){
         this.gp = gp;
@@ -27,9 +26,10 @@ public class EnemySpawner {
         gp.addEnemy(new Enemy(x, y));
     }
     // Checks if it's time to spawn a new enemy
-    public void update(GamePanel gp) {
+    public void update() {
+        long currentTime = System.currentTimeMillis();
         if (currentTime - lastSpawnTime > spawnInterval) {
-            enemySpawner.spawnRandomEnemy();
+            spawnRandomEnemy();
             lastSpawnTime = currentTime;
         }
     }
