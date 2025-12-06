@@ -11,9 +11,15 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
 //for enemy spawning
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 public class GamePanel extends JPanel implements Runnable, KeyListener {
     private boolean running = false;
@@ -30,12 +36,33 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private long lastSpawnTime = 0;
     private final long spawnInterval = 3000;
 
+
+    //might want to make private later
+    public boolean gameover = false;
+
     public Gun currentGun = new Ak_47();
 
+    //booleans for keystroke
     public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed, rPressed, m1Pressed;
 
 
+    //other booleans
+    public boolean can_shoot;
+
+    private int mouseX, mouseY;
+
     public GamePanel() {
+        addMouseMotionListener(new MouseMotionAdapter() {
+           @Override
+           public void mouseMoved(MouseEvent e){
+               mouseX = e.getX();
+               mouseY = e.getY();
+           }
+           @Override
+            public void mouseDragged(MouseEvent e){
+               mouseMoved(e);
+           }
+        });
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
 
@@ -94,6 +121,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 
         if(player.health <= 0) {
+            gameover = true;
             System.out.println("GAME OVER!");
         }
 
@@ -106,16 +134,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             e.update(this);
         }
 
-        enemySpawner.update(this);
-        //for the guns
+        //for enemy spawning
+        enemySpawner.update();
 
-
-        currentGun.shoot(this);
-
-        currentGun.reload(this);
-
-        currentGun.r_count(this);
-
+        //for Gun actions
+        if(can_shoot){
+            currentGun.update(this);
+        }
 
 
     }
@@ -133,9 +158,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+
 
         // Draw the player
         player.draw(g);
+
+
+        // Draw the weapons
+        currentGun.draw(g2, player.getX() + 10, player.getY() + 5, mouseX, mouseY);
 
         for (Enemy enemy : enemies) {
             enemy.draw(g);
@@ -191,6 +222,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public void keyTyped(KeyEvent e) {
         // unused
     }
+
 
     public Player getPlayer() {
         return player;
