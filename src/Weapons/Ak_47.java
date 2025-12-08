@@ -13,6 +13,7 @@ import java.io.InputStream;
 
 
 public class Ak_47 extends Gun {
+    boolean reloading = false; // this was just to make it show the changed number after Please think of a better way
     public Ak_47() {super(30, 40, 0, 0, 20);}
 
     @Override
@@ -27,34 +28,41 @@ public class Ak_47 extends Gun {
 
     @Override
     public void reload(GamePanel gp) {
-
-        if (gp.rPressed && reload_time == 0) {
+        if (reload_time > 0) {
+            reload_time--;
+        }
+        if (gp.rPressed && reload_time <= 0) {
+            reload_time = 100;
+            reloading = true;
+            System.out.println("Reloading!!");
+        }
+        if (reload_time <= 0 && reloading) {
             ammo = magSize;
-            reload_time += 60;
-
-
+            reloading = false;
         }
     }
     @Override
-    public void shoot(GamePanel gp){
+    public void shoot(GamePanel gp, int playerX, int playerY, int mouseX, int mouseY){
         if(fire_time == 0){
-
-            if (ammo > 0 && gp.m1Pressed && !gp.gameover) {
+            if (ammo > 0 && gp.m1Pressed && !gp.gameover && reload_time <= 0) {
                 fire_time += 10;
+                --ammo;
 
-                System.out.println("*AK bang*");
-                ammo--;
+                double angle = Math.atan2(mouseY - playerY, mouseX - playerX);
+
+                int centerX = sprite.getWidth() / 2;
+                int centerY = sprite.getHeight() / 2;
+
+                double barrelLength = 15;
+                double startX = playerX + centerX + Math.cos(angle) * barrelLength;
+                double startY = playerY + centerY + Math.sin(angle) * barrelLength;
+
+                gp.bulletList.add(new Bullet(startX, startY, mouseX, mouseY, muzzle_vel));
             } else if(ammo == 0 && gp.m1Pressed) {
                 System.out.println("*Click*");
             }
         }else{
-            fire_time--;
-        }
-    }
-    @Override
-    public void r_count(GamePanel gp) {
-        while(reload_time > 0 && !gp.gameover) {
-            reload_time--;
+            --fire_time;
         }
     }
 }

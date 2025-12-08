@@ -24,7 +24,6 @@ public abstract class Gun {
     }
     public abstract void reload(GamePanel gp);
     public abstract void shoot(GamePanel gp, int playerX, int playerY, int mouseX, int mouseY);
-    public abstract void r_count(GamePanel gp);
 
     protected abstract void loadSprite();
 
@@ -48,6 +47,18 @@ public abstract class Gun {
     public void update(GamePanel gp, int playerX, int playerY, int mouseX, int mouseY) {
         reload(gp);
         shoot(gp, playerX, playerY, mouseX, mouseY);
-        r_count(gp);
     }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getAmmo() {
+        return ammo;
+    }
+
+    public int getMagSize() {
+        return magSize;
+    }
+
 }

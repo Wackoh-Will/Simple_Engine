@@ -5,6 +5,8 @@ import java.awt.*;
 
 import Weapons.Ak_47; //import the AK
 import Weapons.Gun;
+import Weapons.Bullet;
+
 import entity.Player; // import the Player class
 import entity.Enemy;
 import java.awt.event.KeyListener;
@@ -42,12 +44,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     public Gun currentGun = new Ak_47();
 
+    public ArrayList<Bullet> bulletList = new ArrayList<>();
+
     //booleans for keystroke
     public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed, rPressed, m1Pressed;
 
 
     //other booleans
-    public boolean can_shoot;
+    public boolean can_shoot = true;
 
     private int mouseX, mouseY;
 
@@ -138,9 +142,37 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         enemySpawner.update();
 
         //for Gun actions
-        if(can_shoot){
-            currentGun.update(this);
+        if (can_shoot) {
+            currentGun.update(
+                    this,              // GamePanel
+                    player.getX(),     // player's X
+                    player.getY(),     // player's Y
+                    mouseX,            // mouse X on screen
+                    mouseY             // mouse Y on screen
+            );
         }
+
+        for (Bullet b : bulletList) {
+            b.update();
+        }
+
+        //handles bullet collision with enemy
+        for (int i = 0; i < bulletList.size(); i++) {
+            Bullet b = bulletList.get(i);
+            b.update();
+
+            for (int j = 0; j < enemies.size(); j++) {
+                Enemy e = enemies.get(j);
+                if (b.getBounds().intersects(e.getHitbox())) {
+                    e.takeDamage(currentGun.getDamage());
+                    bulletList.remove(i);
+                    i--;
+                    break;
+                }
+            }
+        }
+        enemies.removeIf(e -> !e.alive);
+        bulletList.removeIf(b -> b.offscreen(getWidth(), getHeight()));
 
 
     }
@@ -166,10 +198,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 
         // Draw the weapons
-        currentGun.draw(g2, player.getX() + 10, player.getY() + 5, mouseX, mouseY);
+        currentGun.draw(g2, player.getX(), player.getY(), mouseX, mouseY);
 
         for (Enemy enemy : enemies) {
             enemy.draw(g);
+        }
+
+        for (Bullet b : bulletList) {
+            b.draw(g2);
         }
 
         //Health Bar
@@ -179,6 +215,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         int x = 10;
         int y = getHeight() - 10;
         g.drawString(healthText, x, y);
+
+        //Ammo
+        g.setColor(Color.YELLOW);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        String AmmoText = currentGun.getAmmo() + " / " + currentGun.getMagSize();
+        int x_ammo = 10;
+        int y_ammo = getHeight() - 30;
+        g.drawString(AmmoText, x_ammo, y_ammo);
 
     }
 

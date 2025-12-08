@@ -24,11 +24,16 @@ public class Bullet {
         y += vy;
     }
     public void draw(Graphics g){
+        g.setColor(Color.YELLOW);
         g.fillRect((int)x,(int)y,width,height);
     }
 
     public Rectangle getBounds(){
         return new Rectangle((int)x,(int)y,width,height);
+    }
+
+    public boolean offscreen(int screenWidth, int screenHeight) {
+        return x < 0 || y < 0 || x > screenWidth || y > screenHeight;
     }
 
 }

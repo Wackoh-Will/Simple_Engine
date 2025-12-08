@@ -12,6 +12,8 @@ import entity.Player;
 public class Enemy {
     private int x, y;
     private BufferedImage sprite;
+    public boolean alive = true;
+    private int damage_timer;
 
     public Enemy(int x, int y) {
         this.x = x;
@@ -37,7 +39,11 @@ public class Enemy {
         }
     }
     private void checkPlayerCollision(Player p) {
-        if (this.getHitbox().intersects(p.getHitbox())) {
+        if (damage_timer > 0){
+            --damage_timer;
+        }
+        if (this.getHitbox().intersects(p.getHitbox()) && damage_timer <= 0) {
+            damage_timer = 40;
             System.out.println("COLLISION!");
             p.health -= 10;
         }
@@ -46,4 +52,14 @@ public class Enemy {
     public void update(GamePanel gp) {
         checkPlayerCollision(gp.getPlayer());
     }
+
+    public int health = 80; // or whatever default
+
+    public void takeDamage(int dmg) {
+        health -= dmg;
+        if (health <= 0) {
+            alive = false;
+        }
+    }
+
 }
